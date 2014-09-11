@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>VoronoiAddition</title>
+		<link rel="stylesheet" type="text/css" href="Animated_SVGS_PS-flat_shadow_styles.css"><!--SVG Animation Styles-->
+		<link rel="stylesheet" type="text/css" href="Animated_SVGS_PS-firefix.css"><!--Minor Firefox Fixes-->
+
+		<style type="text/css"/>
+html, body, canvas {
+	margin: 0px;
+	padding: 0px;
+	width: 100%;
+	height: 100%;
+}
+canvas {
+	background: #ff8
+}
+div {
+	position: absolute;
+	top: 10px;
+	left: 150px;
+}
+div.overlay {
+	left: 50px;
+}
+		</style>
+		<script type="text/javascript">
+Voronoi = {};
+if (!Math.sign) {
+	Math.sign = function(x) {
+		if(isNaN(x)) {
+			return NaN;
+		} else if (x === 0) {
+			return x;
+		} else {
+			return (x > 0 ? 1 : -1);
+		}
+	};
+}
+		</script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script type="text/javascript" src="VPoint.js"></script>
+		<script type="text/javascript" src="VLine.js"></script>
+		<script type="text/javascript" src="VField.js"></script>
+		<script type="text/javascript" src="VDraw.js"></script>
+		<script type="text/javascript">
+$(function() {
+	var cnv = $("#cnv");
+	var canvas = cnv[0];
+	(function() {
+		var widthBase = $(window).width() * 6;
+		var heightBase = $(window).height() * 5;
+		var rate = Math.min(widthBase, heightBase);
+		canvas.style.width = rate / 6 + "px";
+		canvas.style.height = rate / 5 + "px";
+		canvas.width = canvas.offsetWidth;
+		canvas.height = canvas.offsetHeight;
+	})();
+	var context = canvas.getContext("2d");
+	context.clearAll = function() { context.clearRect(0,0,canvas.width, canvas.height); };
+	var field;
+	var drawer = new Voronoi.Drawer(new Voronoi.Setting("#aaa", "#800000"));
+	init();
+	cnv.click(function(event) {
+		var point = getPoint(event);
+		field.addPoint(point);
+context.lineWidth = 1;
+context.lineJoin = "round";
+		drawer.draw(context, field);
+	});
+	$("#shadow-trash").click(init);
+	$("#shadow-camera").click(showOverlay);
+
+	function init() {
+		field = new Voronoi.Field();
+		drawer.draw(context, field);
+	}
+	function showOverlay() {
+		var image = new Image();
+		image.src = "./canvas.png";
+		image.onload = function() {
+			context.drawImage(image, 0, 0, canvas.width, canvas.height);
+		}
+	}
+
+	function getPoint(event) {
+		var p = event;
+		var target = event.target;
+		return new Voronoi.Point(
+			(p.clientX - target.getBoundingClientRect().left) * target.width / target.offsetWidth,
+			(p.clientY - target.getBoundingClientRect().top) * target.height / target.offsetHeight);
+	}
+});
+		</script>
+	</head>
+	<body>
+		<canvas id="cnv"></canvas>
+		<div class="overlay"><span class="svg-icon flat-shadow" id="shadow-camera" ></span></div>
+		<div ><span class="svg-icon flat-shadow" id="shadow-trash" ></span></div>
+		<script src="Animated_SVGS_PS-svg_inject_flat_icons_shadow.js"></script><!--Inject SVG and Toggle CSS Styles-->
+	</body>
+</html>
