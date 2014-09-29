@@ -1,0 +1,27 @@
+._saver_owner {
+	display: block;
+	position: relative;
+}
+._saver_button {
+	display: block;
+}
+._saver_dropdown {
+	display: block;
+	position: absolute;
+	width: 110px;
+}
+._saver_item {
+	display: block;
+	height: 70px;
+	position: static;
+}
+._saver_item_label {
+	height: 50px;
+	width: 50px;
+	float: left;
+}
+._saver_item_close {
+	float: left;
+	height: 50px;
+	width: 50px;
+}

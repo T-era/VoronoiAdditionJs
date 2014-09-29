@@ -5,6 +5,7 @@
 		<title>VoronoiAddition</title>
 		<link rel="stylesheet" type="text/css" href="Animated_SVGS_PS-flat_shadow_styles.css"><!--SVG Animation Styles-->
 		<link rel="stylesheet" type="text/css" href="Animated_SVGS_PS-firefix.css"><!--Minor Firefox Fixes-->
+		<link rel="stylesheet" type="text/css" href="WebStorageFiler.css"><!--Minor Firefox Fixes-->
 
 		<style type="text/css"/>
 html, body, canvas {
@@ -16,13 +17,18 @@ html, body, canvas {
 canvas {
 	background: #ff8
 }
-div {
+div.buttons {
 	position: absolute;
 	top: 10px;
+}
+div.button1 {
+	left: 50px;
+}
+div.button2 {
 	left: 150px;
 }
-div.overlay {
-	left: 50px;
+div.button3 {
+	left: 250px;
 }
 		</style>
 		<script type="text/javascript">
@@ -44,19 +50,12 @@ if (!Math.sign) {
 		<script type="text/javascript" src="VLine.js"></script>
 		<script type="text/javascript" src="VField.js"></script>
 		<script type="text/javascript" src="VDraw.js"></script>
+		<script type="text/javascript" src="WebStorageFiler.js"></script>
+		<script type="text/javascript" src="InitView.js"></script>
 		<script type="text/javascript">
 $(function() {
 	var cnv = $("#cnv");
 	var canvas = cnv[0];
-	(function() {
-		var widthBase = $(window).width() * 6;
-		var heightBase = $(window).height() * 5;
-		var rate = Math.min(widthBase, heightBase);
-		canvas.style.width = rate / 6 + "px";
-		canvas.style.height = rate / 5 + "px";
-		canvas.width = canvas.offsetWidth;
-		canvas.height = canvas.offsetHeight;
-	})();
 	var context = canvas.getContext("2d");
 	context.clearAll = function() {
 		context.fillStyle = "#ff8";
@@ -64,27 +63,45 @@ $(function() {
 	};
 	var field;
 	var drawer = new Voronoi.Drawer(new Voronoi.Setting("#aaa", "#800000"));
+	var viewInit = new ViewInitializer();
+	viewInit.initSize();
+	var filer = viewInit.initWebStorageFiler(
+		function() { return field; },
+		function() { return drawer; },
+		function() { return context; });
+
 	init();
 	cnv.click(function(event) {
+		closeFiler();
 		var point = getPoint(event);
+
 		field.addPoint(point);
 		context.lineWidth = 1;
 		context.lineJoin = "round";
 		drawer.draw(context, field);
 	});
-	$("#shadow-trash").click(init);
-	$("#shadow-camera").click(showOverlay);
+	$("#clear").click(init);
+	$("#snap").click(showOverlay);
+	$("#file").click(openFiler);
 
 	function init() {
+		closeFiler();
 		field = new Voronoi.Field();
 		drawer.draw(context, field);
 	}
 	function showOverlay() {
+		closeFiler();
 		var image = new Image();
 		image.src = "./canvas.png";
 		image.onload = function() {
 			context.drawImage(image, 0, 0, canvas.width, canvas.height);
 		}
+	}
+	function closeFiler() {
+		filer.hide();
+	}
+	function openFiler() {
+		filer.show();
 	}
 
 	function getPoint(event) {
@@ -99,8 +116,9 @@ $(function() {
 	</head>
 	<body>
 		<canvas id="cnv"></canvas>
-		<div class="overlay"><span class="svg-icon flat-shadow" id="shadow-camera" ></span></div>
-		<div ><span class="svg-icon flat-shadow" id="shadow-trash" ></span></div>
+		<div class="buttons button1"><span class="svg-icon shadow-folder" id="file" ></span></div>
+		<div class="buttons button2"><span class="svg-icon shadow-picture" id="snap" ></span></div>
+		<div class="buttons button3"><span class="svg-icon shadow-trash" id="clear" ></span></div>
 		<script src="Animated_SVGS_PS-svg_inject_flat_icons_shadow.js"></script><!--Inject SVG and Toggle CSS Styles-->
 	</body>
 </html>
