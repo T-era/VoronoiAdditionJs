@@ -67,6 +67,7 @@ $(function() {
 	viewInit.initSize();
 	var filer = viewInit.initWebStorageFiler(
 		function() { return field; },
+		function(newField) { field = newField; },
 		function() { return drawer; },
 		function() { return context; });
 

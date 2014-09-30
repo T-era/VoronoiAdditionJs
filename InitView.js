@@ -12,7 +12,7 @@ function ViewInitializer() {
 		canvas.width = canvas.offsetWidth;
 		canvas.height = canvas.offsetHeight;
 	}
-	this.initWebStorageFiler = function(getField, getDrawer, getContext) {
+	this.initWebStorageFiler = function(getField, setField, getDrawer, getContext) {
 		var addNew = $("<span>")
 			.addClass("shadow-camera")
 			.addClass("svg-icon");
@@ -64,6 +64,7 @@ function ViewInitializer() {
 				}
 			}
 			drawer.draw(context, field);
+			setField(field)
 		}
 		function savePoints() {
 			field = getField();
