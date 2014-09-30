@@ -61,7 +61,6 @@ function ViewInitializer() {
 
 					var temp = point.match(REGEX_POINT);
 					field.addPoint(new Voronoi.Point(1 * temp[1], 1 * temp[2]));
-					drawer.draw(context, field);
 				}
 			}
 			drawer.draw(context, field);
