@@ -73,7 +73,7 @@
 .shadow-graph .bar_left { fill: #7BC156 }
 .shadow-graph .bar_middle { fill: #92D76C }
 .shadow-graph .bar_right { fill: #64A242 }
-.shadow-graph .front { fill:  }
+.shadow-graph .front { fill: #fff }
 .shadow-graph .dot_4,
 .shadow-graph .dot_3,
 .shadow-graph .dot_2,
@@ -256,7 +256,7 @@
     -o-transform-origin: 50% 50%;
     transform-origin: 50% 50%;
 }
-@-webkit-keyframes shadow-burst { 
+@-webkit-keyframes shadow-burst {
      {
         -webkit-transform: scale(1.1);
         animation-timing-function: ease-in;
@@ -290,7 +290,7 @@
         animation-timing-function: ease-out;
     }
 }
-@-moz-keyframes shadow-burst { 
+@-moz-keyframes shadow-burst {
      {
         -moz-transform: scale(1,1);
         animation-timing-function: ease-in;
@@ -324,7 +324,7 @@
         animation-timing-function: ease-in;
     }
 }
-@keyframes shadow-burst { 
+@keyframes shadow-burst {
      {
         transform: scale(1,1);
         animation-timing-function: ease-in;
@@ -358,12 +358,12 @@
         animation-timing-function: ease-out;
     }
 }
-@media only screen and (-webkit-min-device-pixel-ratio: 2), 
-only screen and (min--moz-device-pixel-ratio: 2), 
-only screen and (-o-min-device-pixel-ratio: 2/1), 
-only screen and (min-device-pixel-ratio: 2), 
-only screen and (min-resolution: 192dpi), 
-only screen and (min-resolution: 2dppx) { 
+@media only screen and (-webkit-min-device-pixel-ratio: 2),
+only screen and (min--moz-device-pixel-ratio: 2),
+only screen and (-o-min-device-pixel-ratio: 2/1),
+only screen and (min-device-pixel-ratio: 2),
+only screen and (min-resolution: 192dpi),
+only screen and (min-resolution: 2dppx) {
     .long-shadow {
         background: url(../images/long_shadow@2x.png) no-repeat;
         width: 84px;/*168px;*/

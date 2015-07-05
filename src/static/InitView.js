@@ -20,7 +20,7 @@ function ViewInitializer() {
 		$(camera).appendTo(addNew);
 		var wsfArg = {
 			key: "Voronoi",
-			buttons: { 
+			buttons: {
 				trigger: $("#file"),
 				addNew: addNew,
 			},
@@ -50,25 +50,30 @@ function ViewInitializer() {
 		return filer;
 
 		function loadPoints(str) {
-			drawer = getDrawer();
-			context = getContext();
-			field = new Voronoi.Field();
+			var drawer = getDrawer();
+			var context = getContext();
+			var field = new Voronoi.Field();
 			drawer.draw(context, field);
 			var list = str.match(REGEX_POINTS);
 			if (list) {
+				var points = [];
 				for (var i = 0, max = list.length; i < max; i ++) {
-					var point = list[i];
+					var pointStr = list[i];
 
-					var temp = point.match(REGEX_POINT);
-					field.addPoint(new Voronoi.Point(1 * temp[1], 1 * temp[2]));
+					var temp = pointStr.match(REGEX_POINT);
+					var point = new Voronoi.Point(Number(temp[1]), Number(temp[2]));
+					points.push(new Fortune.MPoint(point));
+			//		field.addPoint(new Voronoi.Point(1 * temp[1], 1 * temp[2]));
 				}
+				new Cnv.Convert(new Fortune.BeachLine(points)).to(field);
 			}
+
 			drawer.draw(context, field);
 			setField(field)
 		}
 		function savePoints() {
-			field = getField();
-			var str = keys(field._debugHshToPoint);
+			var field = getField();
+			var str = keys(field.hashToPoint);
 			return str;
 
 			function keys(dict) {

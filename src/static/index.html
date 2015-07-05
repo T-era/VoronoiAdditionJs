@@ -31,25 +31,9 @@ div.button3 {
 	left: 250px;
 }
 		</style>
-		<script type="text/javascript">
-Voronoi = {};
-if (!Math.sign) {
-	Math.sign = function(x) {
-		if(isNaN(x)) {
-			return NaN;
-		} else if (x === 0) {
-			return x;
-		} else {
-			return (x > 0 ? 1 : -1);
-		}
-	};
-}
-		</script>
 		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-		<script type="text/javascript" src="VPoint.js"></script>
-		<script type="text/javascript" src="VLine.js"></script>
-		<script type="text/javascript" src="VField.js"></script>
-		<script type="text/javascript" src="VDraw.js"></script>
+		<script type="text/javascript" src="voronoi_addition.js"></script>
+		<script type="text/javascript" src="voronoi_fortune.js"></script>
 		<script type="text/javascript" src="WebStorageFiler.js"></script>
 		<script type="text/javascript" src="InitView.js"></script>
 		<script type="text/javascript">

@@ -1,69 +1,100 @@
-;(function() {
-	Voronoi.Line = function(p, v) {
-		this.p = p;
-		this.v = v;
-	}
+/// <reference path="VPoint.ts" />
 
-	Voronoi.Line.prototype = {
-		takePoint: function() {
+module Voronoi {
+	export class Line {
+		p :Point;
+		v :Vector;
+		p1 :Point; // 半直線(または線分)の一端
+		p2 :Point; // 線分の一端
+		d :Vector; // 半直線の場合の、一端から延びる方向
+		isNull :boolean;
+
+		constructor(p :Point, v :Vector) {
+			this.p = p;
+			this.v = v;
+		}
+
+		takePoint() :Point {
 			if (this.p1) return this.p1;
 			else return this.p;
-		},
-		isPara: function(arg) {
+		}
+
+		isPara(arg :Line) {
 			return this.v.isPara(arg.v);
-		},
-		isSameDirection: function(arg) {
+		}
+
+		isSameDirection(arg :Line) {
 			if (this.d && arg.d) {
 				return this.d.isSameDirection(arg.d);
 			} else {
 				return this.v.isPara(arg.v);
 			}
-		},
-		isSameSide: function(p1, p2) {
+		}
+
+		isSameSide(p1 :IPoint, p2 :IPoint) :boolean {
 			var s1 = side(this, p1);
 			var s2 = side(this, p2);
 			return s1 === s2;
-			function side(l, p) {
+			function side(l :Line, p :IPoint) :number{
 				return Math.sign(f(l, p));
 			}
 			function f(l, p) {
-				var x = l.p.getX();
-				var y = l.p.getY();
-				var dx = l.v.getDx();
-				var dy = l.v.getDy();
-				return (p.getX() - x) * dy - (p.getY() - y) * dx;
+				var x = l.p.x;
+				var y = l.p.y;
+				var dx = l.v.dx;
+				var dy = l.v.dy;
+				return (p.x - x) * dy - (p.y - y) * dx;
 			}
-		},
-		cross: function(arg) {
+		}
+
+		/// 指定された点が、線分上であるのかどうかを判定します。
+		/// ただし、点は仮想的な直線上である必要があります。
+		isIn(arg :Point) :boolean {
+			if (! this.p1) return true;
+			if (! this.p2) {
+				return ((isSameSign(this.d.dx, arg.x - this.p1.x)
+							&& isSameSign(this.d.dy, arg.y - this.p1.y))
+						|| (this.p1.x === arg.x && this.p1.y === arg.y));
+			} else {
+				return arg.isBetween(this.p1, this.p2);
+			}
+			function isSameSign(a, b) {
+				return Math.sign(a) === Math.sign(b);
+			}
+		}
+
+		cross(arg :Line) :Point {
 			var l1 = this;
 			var l2 = arg;
-			var cr = imaginaryCross(l1, l2);
+			var cr = imaginaryCross();
 			if (cr === null) return null;
 			if (isOut(l1, cr) || isOut(l2, cr)) return null;
 			return cr;
-			function imaginaryCross() {
+
+			function imaginaryCross() :Point {
 				var p1 = l1.p;
 				var v1 = l1.v;
 				var p2 = l2.p;
 				var v2 = l2.v;
 				if (v1.isPara(v2)) return null;
 				else {
-					var denomi = v1.getDx() * v2.getDy() - v2.getDx() * v1.getDy();
+					var denomi = v1.dx * v2.dy - v2.dx * v1.dy;
 					var nume1 = numeSnip(v1, p1);
 					var nume2 = numeSnip(v2, p2);
-					var x = (v1.getDx() * nume2 - v2.getDx() * nume1) / denomi;
-					var y = (v1.getDy() * nume2 - v2.getDy() * nume1) / denomi;
-					return new Voronoi.Point(x, y);
+					var x = (v1.dx * nume2 - v2.dx * nume1) / denomi;
+					var y = (v1.dy * nume2 - v2.dy * nume1) / denomi;
+					return new Point(x, y);
 				}
-				function numeSnip(v, p) {
-					return v.getDy() * p.getX() - v.getDx() * p.getY();
+				function numeSnip(v :Vector, p :Point) :number {
+					return v.dy * p.x - v.dx * p.y;
 				}
 			}
-			function isOut(l, p) {
+			function isOut(l :Line, p :Point) :boolean {
 				return ! l.isIn(p);
 			}
-		},
-		chop: function(breakLine, side) {
+		}
+
+		chop(breakLine :Line, side :Point) {
 			var para = this.isPara(breakLine);
 			var cp = para ? null : this.cross(breakLine);
 			if (!cp) {
@@ -74,11 +105,12 @@
 			} else {
 				return this.chopAt(cp, isHereSide);
 			}
-			function isHereSide(arg) {
+			function isHereSide(arg :IPoint) :boolean {
 				return breakLine.isSameSide(arg, side);
 			}
-		},
-		chopAt: function(crossPoint, fIsHereSide) {
+		}
+
+		chopAt(crossPoint :Point, fIsHereSide :(arg:IPoint)=>boolean) {
 			if (! this.p1) {
 				this.p1 = crossPoint;
 				if (fIsHereSide(this.v.apply(crossPoint, 1))) {
@@ -116,21 +148,8 @@
 				}
 				return true;
 			}
-		},
-		isIn: function(arg) {
-			if (! this.p1) return true;
-			if (! this.p2) {
-				return ((isSameSign(this.d.getDx(), arg.getX() - this.p1.getX())
-					&& isSameSign(this.d.getDy(), arg.getY() - this.p1.getY()))
-					|| (this.p1.getX() === arg.getX() && this.p1.getY() === arg.getY()));
-			} else {
-				return arg.isBetween(this.p1, this.p2);
-			}
-			function isSameSign(a, b) {
-				return Math.sign(a) === Math.sign(b);
-			}
-		},
-		toString: function() {
+		}
+		toString() :string {
 			if (this.p2) {
 				return "Close :" + this.p1 + "-" + this.p2;
 			} else if (this.p1) {
@@ -139,7 +158,16 @@
 				return "Line : " + this.p + "->" + this.v;
 			}
 		}
+	}
+	export function bisector(p1 :IPoint, p2 :IPoint) :Line {
+		if (p1.x === p2.x
+			&& p1.y === p2.y) throw "同一の点";
+		var center = new Point((p1.x + p2.x) / 2, (p1.y + p2.y) / 2);
+		var v = new Vector(p2.y - p1.y, p1.x - p2.x);
+		return new Line(center, v);
 	};
+}
+/*
 	function isLine(obj) {
 		return obj.p
 			&& obj.v
@@ -155,12 +183,4 @@
 		return obj.p1
 			&& obj.p2;
 	}
-
-	Voronoi.bisector = function(p1, p2) {
-		if (p1.getX() === p2.getX()
-			&& p1.getY() === p2.getY()) throw "同一の点";
-		var center = new Voronoi.Point((p1.getX() + p2.getX()) / 2, (p1.getY() + p2.getY()) / 2);
-		var v = new Voronoi.Vector(p2.getY() - p1.getY(), p1.getX() - p2.getX());
-		return new Voronoi.Line(center, v);
-	};
-})();
+*/
