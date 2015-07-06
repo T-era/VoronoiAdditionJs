@@ -1,7 +1,6 @@
 /// <reference path="../bl/FBeachLine.ts" />
 /// <reference path="../ad/VField.ts" />
 
-
 module Cnv {
     export class Convert {
         input :Fortune.BeachLine;
@@ -12,15 +11,15 @@ module Cnv {
         }
         to(output :Voronoi.Field) {
             var count = this.input.seedCount;
-            var hashToPoint :{ [index :string]: Voronoi.Point } = {}; //to_dict(this.input.seedSortedByY, Voronoi.toHash);
-            var hashToVLines :{ [index :string]: Voronoi.VLine[] } = {}; //this.input.seedSortedByY, Voronoi.toHash);
+            var hashToPoint :{ [index :string]: Voronoi.Point } = {};
+            var hashToVLines :{ [index :string]: Voronoi.VLine[] } = {};
             for (var i = 0, max = this.input.seedSortedByY.length; i < max; i ++) {
                 var mPoint = this.input.seedSortedByY[i];
                 var mPoinHash = Voronoi.toHash(mPoint);
                 var point = new Voronoi.Point(mPoint.x, mPoint.y);
                 hashToPoint[mPoinHash] = point;
                 var vLineList :Voronoi.VLine[] = [];
-                for (var j = 0, max = mPoint.voronoiLines.length; j < max; j++) {
+                for (var j = 0, jMax = mPoint.voronoiLines.length; j < jMax; j++) {
                     vLineList.push(mPoint.voronoiLines[j]);
                 }
                 for (var hash in mPoint.lonleyNeighbor) {
@@ -36,22 +35,14 @@ module Cnv {
             }
 
             output.countInField = count;
-		    output.hashToPoint = hashToPoint;
+		        output.hashToPoint = hashToPoint;
             output.hashToVLines = hashToVLines;
 
             function isHereSide(side :Voronoi.IPoint, breakLine :Voronoi.Line) :(a:Voronoi.IPoint)=>boolean {
                 return function(arg :Voronoi.IPoint) {
-                    return breakLine.isSameSide(arg, side);
+                    return !breakLine.isSameSide(arg, side);
                 }
             }
         }
-    }
-    function to_dict<T>(values :T[], fGetKey :(v:T)=>string) :{ [index :string]: T } {
-        var ret :{ [index :string]: T } = {};
-        for (var i = 0, max = values.length; i < max; i ++) {
-            var value = values[i];
-            ret[fGetKey(value)] = value;
-        }
-        return ret
     }
 }

@@ -50,16 +50,3 @@ module Fortune {
 		}
 	}
 }
-/*
-	/// MPointを囲むボロノイ領域が閉じていない場合、画面縁辺までの線分を追加して領域を(視覚的に)閉じます。
-	/// このメソッドを処理途中で呼ぶと、正しくボロノイ図を計算できません。
-	Voronoi.MPoint.prototype.finalize = function() {
-		for (var str in this.lonleyNeighbor) {
-			var mp = this.lonleyNeighbor[str].k;
-			var vp = this.lonleyNeighbor[str].v;
-			var another = this.lonleyNeighbor[str].w;
-			var l = Line.getBisector(vp, this, mp, another);
-			this.voronoiLines.push(l);
-		}
-	}
-*/

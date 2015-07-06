@@ -47,7 +47,7 @@ module Fortune {
 		}
 
 		stepNextEvent() :boolean {
-			var event :Event = null; // TODO types
+			var event :Event = null;
 			var done = false;
 
 			var nextCircle = this.getNextCircleEvent();
@@ -105,62 +105,3 @@ module Fortune {
 		}
 	}
 }
-/*
-	Voronoi.BeachLine = function(arg, logger) {
-
-
-	Voronoi.BeachLine.prototype.stepPixel = function() {
-		var nextDepth = this.depth + 1;
-		var nextSight = this.getNextSight();
-		var sightEventOccur = nextSight
-				&& nextDepth > nextSight.y;
-		var nextCircle = this.getNextCircleEvent();
-		var circleEventOccur = nextCircle
-				&& nextDepth > nextCircle.circleEventDepth;
-		if (sightEventOccur
-				|| circleEventOccur) {
-			this.stepNextEvent();
-		} else {
-			this.depth = nextDepth;
-			this.lastEvent = null;
-			this.logger("Step to " + dTo_2s(this.depth));
-		}
-	};
-
-	Voronoi.BeachLine.prototype.draw = function(context) {
-		var size = Voronoi.WorldSize;
-		context.clearRect(0,0, size.width, size.height);
-
-		if (this.lastEvent)
-			this.lastEvent.draw(context);
-
-		context.beginPath();
-		context.strokeStyle = "#aaa";
-		context.moveTo(0, this.depth);
-		context.lineTo(size.width, this.depth);
-		context.stroke();
-
-		if (this.topNode) {
-			var d = this.depth;
-			this.topNode.forEach(function(node) {
-				node.draw(context, d);
-			});
-		}
-		for (var i = 0, max = this.seedCount; i < max; i ++) {
-			var p = this.getSeedAt(i);
-			p.draw(context);
-		}
-		if (!Voronoi.BeachLine.isGiraffeMode) {
-			context.strokeStyle = "#f00";
-			this.voronoiPoints.forEach(function(v) {
-				context.beginPath();
-				context.arc(v.x, v.y, 2, 0, 7);
-				context.stroke();
-			});
-		}
-	};
-
-
-	Voronoi.BeachLine.prototype.t
-})();
-*/

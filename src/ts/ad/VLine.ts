@@ -167,20 +167,3 @@ module Voronoi {
 		return new Line(center, v);
 	};
 }
-/*
-	function isLine(obj) {
-		return obj.p
-			&& obj.v
-			&& ! obj.p1
-			&& ! obj.p2;
-	}
-	function isSLine(obj) {
-		return obj.d
-			&& obj.p1
-			&& ! obj.p2;
-	}
-	function isCLine(obj) {
-		return obj.p1
-			&& obj.p2;
-	}
-*/

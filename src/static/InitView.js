@@ -63,7 +63,6 @@ function ViewInitializer() {
 					var temp = pointStr.match(REGEX_POINT);
 					var point = new Voronoi.Point(Number(temp[1]), Number(temp[2]));
 					points.push(new Fortune.MPoint(point));
-			//		field.addPoint(new Voronoi.Point(1 * temp[1], 1 * temp[2]));
 				}
 				new Cnv.Convert(new Fortune.BeachLine(points)).to(field);
 			}
