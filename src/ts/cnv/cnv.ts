@@ -19,9 +19,10 @@ module Cnv {
                 var point = new Voronoi.Point(mPoint.x, mPoint.y);
                 hashToPoint[mPoinHash] = point;
                 var vLineList :Voronoi.VLine[] = [];
-                for (var j = 0, jMax = mPoint.voronoiLines.length; j < jMax; j++) {
-                    vLineList.push(mPoint.voronoiLines[j]);
-                }
+
+                mPoint.voronoiLines.forEach(function(voronoiLine) {
+                    vLineList.push(voronoiLine);
+                });
                 for (var hash in mPoint.lonleyNeighbor) {
                     var neighbor :Fortune.Neighbor = mPoint.lonleyNeighbor[hash];
                     // k,v,w
@@ -35,7 +36,7 @@ module Cnv {
             }
 
             output.countInField = count;
-		        output.hashToPoint = hashToPoint;
+            output.hashToPoint = hashToPoint;
             output.hashToVLines = hashToVLines;
 
             function isHereSide(side :Voronoi.IPoint, breakLine :Voronoi.Line) :(a:Voronoi.IPoint)=>boolean {

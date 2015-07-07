@@ -38,10 +38,10 @@ module Fortune {
 				var ln = that.lonleyNeighbor[mp1.toString()];
 				if (ln) {
 					var newVPoint = ln.v;
-					var line :Voronoi.Line = Voronoi.bisector(mp1, mp2);
+					var line :Voronoi.Line = Voronoi.bisector(that, mp1);
 					line.p1 = vPoint;
 					line.p2 = newVPoint;
-					that.voronoiLines.push(new Voronoi.VLine(new Voronoi.Point(mp1.x, mp1.y), line)); // TODO mp1? mp2?
+					that.voronoiLines.push(new Voronoi.VLine(new Voronoi.Point(mp1.x, mp1.y), line));
 					delete this.lonleyNeighbor[mp1.toString()];
 				} else {
 					that.lonleyNeighbor[mp1.toString()] = { k: mp1, v: vPoint, w: mp2 };
